@@ -28,5 +28,5 @@ variable "stage" {
 variable "github_repo_url" {
   description = "GitHub repo to clone"
   type        = string
-  default     = "https://github.com/DevCloudy-max/SimpleHttpServer_Java.git"
+  default     = "https://github.com/techeazy-consulting/techeazy-devops.git"
 }
