@@ -14,7 +14,7 @@ provider "aws" {
 
 
 resource "aws_instance" "ec2_instance" {
-  ami           = "ami-0d03cb826412c6b0f"
+  ami           = var.AMI_img_Id
   instance_type = var.instance_type
 
   tags = {
@@ -23,9 +23,14 @@ resource "aws_instance" "ec2_instance" {
   }
 
 
-  user_data = file("scripts/install_app.sh")
-}
+  user_data = base64encode(templatefile("scripts/install_app.sh", {
+    REPO_URL = var.github_repo_url
+    STOP_INSTANCE       = var.stop_after
 
+
+  }))
+
+}
 data "aws_vpc" "default" {
   default = true
 }

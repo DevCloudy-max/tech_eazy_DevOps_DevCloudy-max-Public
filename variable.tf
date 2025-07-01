@@ -5,8 +5,9 @@ variable "region" {
 
 }
 
-variable "Image_Id" {
+variable "AMI_img_Id" {
   description = "AMI id"
+  type        = string
   default     = "ami-0d03cb826412c6b0f"
 
 }
@@ -30,3 +31,10 @@ variable "github_repo_url" {
   type        = string
   default     = "https://github.com/techeazy-consulting/techeazy-devops.git"
 }
+
+variable "stop_after"{
+ description = "After the given time instance is stop automatically"
+ type        = number
+    default     = 20
+}
+  

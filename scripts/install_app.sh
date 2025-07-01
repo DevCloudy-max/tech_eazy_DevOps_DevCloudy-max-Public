@@ -3,11 +3,14 @@
 # Enable debugging and exit on error
 set -e
 
+REPO_URL="${REPO_URL}"
+STOP_INSTANCE="${STOP_INSTANCE}"
+
 # 1. Log Setup
 LOG_FILE="/var/log/user_data.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "🚀 Provisioning Start"
+echo "Provisioning Start"
 
 # 2. Update Packages
 echo "Updating system packages..."
@@ -18,7 +21,7 @@ echo "Installing Java 21 and Git..."
 sudo dnf install -y java-21-amazon-corretto-devel git
 
 # 4. Clone GitHub Repository
-REPO_URL="https://github.com/techeazy-consulting/techeazy-devops.git"
+#PO_URL="https://github.com/techeazy-consulting/techeazy-devops.git"
 APP_DIR="/home/ec2-user/app"
 
 echo "Cloning GitHub repository from $REPO_URL..."
@@ -33,15 +36,15 @@ export HOME="/home/ec2-user"
 echo "Making mvnw executable..."
 chmod +x ./mvnw
 
-echo "🔧 Building Spring Boot application..."
+echo " Building Spring Boot application..."
 ./mvnw clean install
 
-echo "🚀 Starting Spring Boot application..."
-sudo java -jar target/techeazy-devops-0.0.1-SNAPSHOT.jar &
-echo "✅ Application started."
+echo " Starting Spring Boot application..."
+nohup $JAVA_HOME/bin/java -jar target/*.jar > app.log 2>&1 &
+echo "Application started."
 
 # 6. Schedule Auto Shutdown
-echo "Scheduling instance shutdown in 30 minutes..."
-sudo shutdown -h +30
+echo "Scheduling instance shutdown in '$STOP_INSTANCE' minutes.."
+sudo shutdown -h +"$STOP_INSTANCE"  
 
-echo "✅ Provisioning Complete"
+echo " Provisioning Complete"
