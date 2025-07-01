@@ -26,8 +26,8 @@ This project automates the provisioning of an EC2 instance on AWS using Terrafor
 ├── outputs.tf
 ├── dev_config.tfvars
 ├── prod_config.tfvars
-├── dev_script.sh
-├── prod_script.sh
+├── Script
+  ├── install_app.sh
 └── README.md
 ```
 
