@@ -78,7 +78,7 @@ terraform plan -var-file="dev_config.tfvars"
 ### 6. 🚀 Apply the configuration
 
 ```
-terraform apply -var-file="dev_config.tfvars" -auto-approve
+terraform apply -var-file="dev_config.tfvars" 
 ```
 
 ### 📂 Files and Folders
