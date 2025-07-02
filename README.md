@@ -48,21 +48,28 @@ cd tech_eazy_DevOps_DevCloudy-max-Public
 🔐 Don't include sensitive keys here.
 ### NOTE : It is not compulsory to create this file i already created in my project but if you need any change in configuration like, change type of the instacne, stop instance type etc then you can do.
 
+### 3. Configure AWS Credentials
+Before running any Terraform commands, make sure your AWS credentials (Access Key and Secret Key) are properly configured. You can do this by running the following command:
 
+```
+aws configure
+AWS Access Key ID [None]: AKIA**************
+AWS Secret Access Key [None]: ***************
+```
 
-### 3. ⚙️ Initialize Terraform
+### 4. ⚙️ Initialize Terraform
 
 ```
 terraform init
 ```
 
-### 4. 🔍 Preview the changes
+### 5. 🔍 Preview the changes
 
 ```
 terraform plan -var-file="dev_config.tfvars"
 ```
 
-### 5. 🚀 Apply the configuration
+### 6. 🚀 Apply the configuration
 
 ```
 terraform apply -var-file="dev_config.tfvars" -auto-approve
