@@ -39,7 +39,7 @@ cd tech_eazy_DevOps_DevCloudy-max-Public
 
 ### 2. 🧪 Prepare Your .tfvars(Example dev_config.tfvars)
 
-##Example :
+## Example :
  instance_type    = "t2.micro"
  stage            = "dev"
  region           = "ap-south-1"
@@ -59,7 +59,7 @@ Default region name [None]: ap-south-1
 Default output format [None]: json
 ```
 
-###Note : This two things 
+### Note : This two things 
 Default region name and 
 Default output format is not mandatory you leave it blank and simply press enter
 
