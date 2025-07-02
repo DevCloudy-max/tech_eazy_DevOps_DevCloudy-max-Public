@@ -81,6 +81,8 @@ terraform plan -var-file="dev_config.tfvars"
 terraform apply -var-file="dev_config.tfvars" 
 ```
 
+#NOTE: PLEASE WAIT AFTER "TERRAFORM APPLY" BECAUSE IT MAY TAKE 5 MINUTES FOR CONFIGURATION AND DEPLOYMENT. 
+
 ### 📂 Files and Folders
 
 | File/Folder              | Purpose                               |
