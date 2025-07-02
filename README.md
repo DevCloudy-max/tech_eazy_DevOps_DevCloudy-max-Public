@@ -32,6 +32,8 @@ This project automates the provisioning of an EC2 instance using Terraform. It i
 
 ```bash
 git clone https://github.com/DevCloudy-max/tech_eazy_DevOps_DevCloudy-max-Public.git
+```
+```
 cd tech_eazy_DevOps_DevCloudy-max-Public
 ```
 
@@ -44,7 +46,7 @@ cd tech_eazy_DevOps_DevCloudy-max-Public
  s3_bucket_prefix = "techeazy-logs-dev-role-"
  delete_S3_bucket = "true"
 🔐 Don't include sensitive keys here.
-### NOTE : It is not compulsory to create this file i already created this in my project but if you need any change in configuration like, change type of the instacne, stop instance type etc then you can do.
+### NOTE : It is not compulsory to create this file i already created in my project but if you need any change in configuration like, change type of the instacne, stop instance type etc then you can do.
 
 
 
