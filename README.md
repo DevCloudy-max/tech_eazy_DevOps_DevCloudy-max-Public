@@ -37,7 +37,7 @@ git clone https://github.com/DevCloudy-max/tech_eazy_DevOps_DevCloudy-max-Public
 cd tech_eazy_DevOps_DevCloudy-max-Public
 ```
 
-### 🧪 Prepare Your .tfvars(Example dev_config.tfvars)
+### 2. 🧪 Prepare Your .tfvars(Example dev_config.tfvars)
 
 ##Example :
  instance_type    = "t2.micro"
