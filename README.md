@@ -55,7 +55,13 @@ Before running any Terraform commands, make sure your AWS credentials (Access Ke
 aws configure
 AWS Access Key ID [None]: AKIA**************
 AWS Secret Access Key [None]: ***************
+Default region name [None]: ap-south-1
+Default output format [None]: json
 ```
+
+###Note : This two things 
+Default region name and 
+Default output format is not mandatory you leave it blank and simply press enter
 
 ### 4. ⚙️ Initialize Terraform
 
