@@ -1,56 +1,83 @@
-# ☁️ Automated EC2 Deployment with Terraform
+# 🚀 Terraform AWS EC2 + S3 Log Upload Project
 
-This project automates the provisioning of an EC2 instance on AWS using Terraform. The EC2 instance pulls a Spring Boot project from GitHub, builds it using Maven, runs the application and auto-shuts down after a specified duration.
-
----
-
-## 🧰 Features
-
-- EC2 provisioning using Terraform
-- Cloud-init shell script for:
-  - Java + Maven installation
-  - Secure GitHub repository clone using `GITHUB_TOKEN`
-  - Spring Boot project build (`mvn clean package`)
-  - Application auto-start (`java -jar target/*.jar`)
-  - Automatic instance shutdown after `N` minutes
-- Separate `dev` and `prod` environment support via `dev_config.tfvars` / `prod_config.tfvars`
+This project automates the provisioning of an EC2 instance using Terraform. It installs a Spring Boot app from GitHub and uploads logs to a secure S3 bucket. All AWS resources are provisioned using best practices like IAM roles and lifecycle rules.
 
 ---
 
-## 📁 Project Structure
+## 📦 What This Project Does
+
+- Creates an EC2 instance in a specified region.
+- Installs Java and Spring Boot application from a GitHub repository.
+- Uploads logs to a randomly named S3 bucket.
+- Adds a lifecycle rule to delete logs older than 7 days.
+- Shuts down EC2 instance automatically after a set time.
+- Uses IAM roles for secure S3 access (Write-Only for EC2).
+
+---
+
+## 🔧 Prerequisites
+
+| Tool             | Version/Requirement |
+|------------------|---------------------|
+| Terraform        | v1.6 or later       |
+| AWS Account      | Access + Secret Key |
+| GitHub Repo      | Spring Boot App     |
+| AWS CLI (Optional for debugging) | Pre-installed in Amazon Linux 2 |
+
+---
+
+## 🛠️ Setup Instructions
+
+### 1. 📁 Clone the repository
 
 ```bash
-.
-├── main.tf
-├── variables.tf
-├── outputs.tf
-├── dev_config.tfvars
-├── prod_config.tfvars
-├── Script
-  ├── install_app.sh
-└── README.md
+git clone https://github.com/DevCloudy-max/tech_eazy_DevOps_DevCloudy-max-Public.git
+cd tech_eazy_DevOps_DevCloudy-max-Public
 ```
 
+### 🧪 Prepare Your .tfvars(Example dev_config.tfvars)
 
-## Requirements
-Terraform CLI (v1.5+)
+##Example :
+ instance_type    = "t2.micro"
+ stage            = "dev"
+ region           = "ap-south-1"
+ s3_bucket_prefix = "techeazy-logs-dev-role-"
+ delete_S3_bucket = "true"
+🔐 Don't include sensitive keys here.
+### NOTE : It is not compulsory to create this file i already created this in my project but if you need any change in configuration like, change type of the instacne, stop instance type etc then you can do.
 
-AWS CLI configured with appropriate credentials
 
 
-## How to Deploy
-1. Initialize Terraform
+### 3. ⚙️ Initialize Terraform
+
 ```
 terraform init
 ```
 
-2. Validate and Plan
+### 4. 🔍 Preview the changes
+
 ```
 terraform plan -var-file="dev_config.tfvars"
-
 ```
 
-3.  Apply the Configuration
+### 5. 🚀 Apply the configuration
+
 ```
-terraform apply -var-file="dev_config.tfvars"
+terraform apply -var-file="dev_config.tfvars" -auto-approve
 ```
+
+### 📂 Files and Folders
+
+| File/Folder              | Purpose                               |
+| ------------------------ | ------------------------------------- |
+| `main.tf`                | Infrastructure configuration          |
+| `dev_config.tfvars`      | Your environment-specific variables   |
+| `scripts/install_app.sh` | EC2 user data script for provisioning |
+| `outputs.tf` (optional)  | Outputs like instance public IP       |
+
+
+### 🛑 Tear Down Infrastructure
+```
+terraform destroy -var-file="dev_config.tfvars" -auto-approve
+```
+### NOTE : 💡 Make sure your S3 bucket is empty or use force_destroy = true.
