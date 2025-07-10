@@ -47,6 +47,7 @@ variable "s3_bucket_prefix" {
 variable "delete_S3_bucket" {
   description = "To delete force fully"
   type        = bool
+  default =  true
 
 }
 
