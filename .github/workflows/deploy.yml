@@ -72,13 +72,17 @@ jobs:
             - name: Wait for EC2 to be ready on port 80 !!!
               run: |
                set +e 
-               export EC2_PUBLIC_IP=$(terraform output -raw aws_Main_instance_Public_Ip)
+                export EC2_PUBLIC_IP=$(terraform output -raw aws_Main_instance_Public_Ip)
                 echo "EC2 Public IP: $EC2_PUBLIC_IP"
+
+                # Add an initial sleep to give the application more time to start
+                echo "Giving application an initial 30 seconds to start..."
+                sleep 30
 
                 for i in {1..15}; do
                   echo "Attempt $i: Checking port 80..."
-
-                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://$EC2_PUBLIC_IP)
+                  # Add --connect-timeout and -m (max-time) to curl for robustness
+                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 5 -m 10 http://$EC2_PUBLIC_IP)
                   echo "HTTP Status: $STATUS"
 
                   if [[ "$STATUS" == "200" ]]; then
