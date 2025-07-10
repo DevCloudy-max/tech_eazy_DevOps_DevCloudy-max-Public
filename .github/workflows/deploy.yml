@@ -80,3 +80,14 @@ jobs:
                echo "App is not reachable on port 80 after multiple attempts."
                exit 1
 
+            - name: ⏳ Wait 10 minutes before destroying
+              if: steps.get-stage.outputs.stage == 'dev' 
+              run: |
+                echo "Waiting 10 minutes before automatic destroy..."
+                sleep 600  # 600 seconds = 10 minutes
+
+            - name: 🧨 Terraform Destroy (Auto cleanup for dev)
+              if: steps.get-stage.outputs.stage == 'dev' 
+              run: terraform destroy -auto-approve -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars"
+
+
