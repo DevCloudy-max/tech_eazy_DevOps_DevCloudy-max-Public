@@ -77,12 +77,12 @@ jobs:
 
                 # Add an initial sleep to give the application more time to start
                 echo "Giving application an initial 30 seconds to start..."
-                sleep 30
+                sleep 100
 
                 for i in {1..15}; do
                   echo "Attempt $i: Checking port 80..."
                   # Add --connect-timeout and -m (max-time) to curl for robustness
-                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 5 -m 10 http://$EC2_PUBLIC_IP)
+                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 -m 30 http://$EC2_PUBLIC_IP/)
                   echo "HTTP Status: $STATUS"
 
                   if [[ "$STATUS" == "200" ]]; then
