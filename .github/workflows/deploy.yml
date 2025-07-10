@@ -61,11 +61,12 @@ jobs:
 
             - name: Terraform Apply
               run: terraform apply -auto-approve -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars"
-
+            
+              #run this for loop 15 times but after each loop stop for 10 sec then agian iterate
             - name: Wait for EC2 to be ready on port 80 !!!
               run: |
                EC2_PUBLIC_IP=$(terraform output -raw aws_Main_instance_Public_Ip)
-
+                    
                for i in {1..15}; do
 
                   if curl -s --head http://$EC2_PUBLIC_IP | grep "200 OK" > /dev/null; then
