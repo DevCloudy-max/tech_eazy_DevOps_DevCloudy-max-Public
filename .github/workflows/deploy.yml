@@ -32,8 +32,14 @@ jobs:
               run: |
                if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
                   echo "stage=dev" >> "$GITHUB_OUTPUT"
+
+               elif [[ "${GITHUB_REF}" == "refs/tags/feature/pipline-enhancement" ]]; then
+                  echo "stage=dev" >> "$GITHUB_OUTPUT"
+
                elif [[ "${GITHUB_REF}" == "refs/tags/deploy-prod" ]]; then
                   echo "stage=prod" >> "$GITHUB_OUTPUT"
+
+               
                elif [[ "${GITHUB_REF}" == "refs/tags/deploy-dev" ]]; then
                   echo "stage=dev" >> "$GITHUB_OUTPUT"
                else
