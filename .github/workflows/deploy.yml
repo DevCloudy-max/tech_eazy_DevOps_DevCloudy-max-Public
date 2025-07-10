@@ -80,7 +80,7 @@ jobs:
                     exit 0
                   else
                     echo " Not ready yet, retrying in 10s..."
-                    sleep 10
+                    sleep 25
                   fi
                done
                echo "App is not reachable on port 80 after multiple attempts."
@@ -90,7 +90,7 @@ jobs:
               if: steps.get-stage.outputs.stage == 'dev' 
               run: |
                 echo "Waiting 10 minutes before automatic destroy..."
-                sleep 600  # 600 seconds = 10 minutes
+                sleep 700 
 
             - name: 🧨 Terraform Destroy (Auto cleanup for dev)
               if: steps.get-stage.outputs.stage == 'dev' 
