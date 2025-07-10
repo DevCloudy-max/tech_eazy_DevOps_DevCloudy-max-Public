@@ -71,6 +71,7 @@ jobs:
               #run this for loop 15 times but after each loop stop for 10 sec then agian iterate
             - name: Wait for EC2 to be ready on port 80 !!!
               run: |
+               set +e 
                EC2_PUBLIC_IP=$(terraform output -raw aws_Main_instance_Public_Ip)
                 echo "EC2 Public IP: $EC2_PUBLIC_IP"
 
