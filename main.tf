@@ -102,6 +102,10 @@ resource "aws_iam_role_policy" "write_only_policy" {
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
   name = "ec2-write-only-profile"
   role = aws_iam_role.write_only_role.name
+
+   lifecycle {
+    prevent_destroy = true
+  }
 }
 
 
@@ -110,6 +114,10 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 resource "aws_iam_instance_profile" "read_instance_profile" {
   name = "ec2-read-only-profile"
   role = aws_iam_role.read_only_role.name
+
+   lifecycle {
+    prevent_destroy = true
+  }
 }
 
 
