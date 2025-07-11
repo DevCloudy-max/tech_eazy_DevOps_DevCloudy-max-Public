@@ -1,3 +1,5 @@
-instance_type   = "t2.large"
-stage           = "prod"
-region          = "ap-south-1"
+instance_type    = "t2.large"
+stage            = "prod"
+region           = "ap-south-1"
+s3_bucket_prefix = "techeazy-logs-prod-role-"
+delete_S3_bucket = "false"
