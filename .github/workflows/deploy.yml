@@ -67,37 +67,42 @@ jobs:
 
             - name: Terraform Apply
               run: terraform apply -auto-approve -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars"
+
+            - name: Get EC2 Public IP
+              id: get-ec2-ip
+              run: |
+                echo "EC2_PUBLIC_IP=$(terraform output -raw aws_Main_instance_Public_Ip)" >> $GITHUB_ENV
+
             
               #run this for loop 15 times but after each loop stop for 10 sec then agian iterate
             - name: Wait for EC2 to be ready on port 80 !!!
               run: |
 
-                set +e
+                 set +e
 
-                echo "Getting EC2 IP..."
-                export EC2_PUBLIC_IP=$(terraform output -raw aws_Main_instance_Public_Ip)
-                echo "EC2 IP: $EC2_PUBLIC_IP"
+                  echo "EC2 IP from ENV: $EC2_PUBLIC_IP"
 
-                echo "Sleeping 60 seconds to let app boot..."
-                sleep 60
+                  echo "Sleeping 60 seconds to let app boot..."
+                  sleep 60
 
-                for i in {1..15}; do
-                  echo "Try $i: Curling http://$EC2_PUBLIC_IP with -v"
-                  curl -v http://$EC2_PUBLIC_IP || true
-                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://$EC2_PUBLIC_IP)
-                  echo "HTTP Status: $STATUS"
+                  for i in {1..15}; do
+                    echo "Try $i: Curling http://$EC2_PUBLIC_IP with -v"
+                    curl -v http://$EC2_PUBLIC_IP || true
+                    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://$EC2_PUBLIC_IP)
+                    echo "HTTP Status: $STATUS"
 
-                  if [[ "$STATUS" == "200" ]]; then
-                    echo "✅ App reachable!"
-                    exit 0
-                  fi
-                  echo "⏳ Not ready, retrying..."
-                  sleep 10
-                done
+                    if [[ "$STATUS" == "200" ]]; then
+                      echo "✅ App reachable!"
+                      exit 0
+                    fi
+                    echo "⏳ Not ready, retrying..."
+                    sleep 10
+                  done
 
-                echo "❌ App not reachable after 15 tries."
-                exit 1
-
+                  echo "❌ App not reachable after 15 tries."
+                  exit 1
+              env:
+                EC2_PUBLIC_IP: ${{ env.EC2_PUBLIC_IP }}
               #  set +e 
               #   export EC2_PUBLIC_IP=$(terraform output -raw aws_Main_instance_Public_Ip)
               #   echo "EC2 Public IP: $EC2_PUBLIC_IP"
