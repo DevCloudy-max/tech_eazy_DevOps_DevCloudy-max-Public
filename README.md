@@ -1,17 +1,21 @@
-# 🚀 Terraform AWS EC2 + S3 Log Upload Project
+# 🚀 Terraform AWS EC2 + S3 Log Upload + CI/CD Pipeline Project
 
-This project automates the provisioning of an EC2 instance using Terraform. It installs a Spring Boot app from GitHub and uploads logs to a secure S3 bucket. All AWS resources are provisioned using best practices like IAM roles and lifecycle rules.
+This project automates the provisioning of EC2 instances using Terraform, deploys a Spring Boot app from GitHub, uploads logs to a secure S3 bucket, and performs health checks using a verifier instance. It also includes a GitHub Actions CI/CD pipeline for fully automated deployment.
 
 ---
 
 ## 📦 What This Project Does
 
-- Creates an EC2 instance in a specified region.
-- Installs Java and Spring Boot application from a GitHub repository.
-- Uploads logs to a randomly named S3 bucket.
-- Adds a lifecycle rule to delete logs older than 7 days.
-- Shuts down EC2 instance automatically after a set time.
-- Uses IAM roles for secure S3 access (Write-Only for EC2).
+- Provisions a main EC2 instance running a Spring Boot application.
+- Provisions an additional EC2 verifier instance to simulate load/monitoring or future test scripts.
+- Installs Java and pulls the Spring Boot app from a public GitHub repo.
+- Uploads application logs to a secure, uniquely named S3 bucket.
+- Adds S3 lifecycle rules to delete logs older than 7 days.
+- Automatically shuts down EC2 after a time (via Terraform or CI/CD).
+- Implements CI/CD using GitHub Actions.
+- Uses IAM roles with least privilege for EC2/S3 access:
+   - Write-only access to the log bucket from EC2.
+   - Read-only access (optional) from verifier.
 
 ---
 
@@ -83,16 +87,20 @@ terraform apply -var-file="dev_config.tfvars"
 
 # NOTE: PLEASE WAIT AFTER "TERRAFORM APPLY" BECAUSE IT MAY TAKE 5 MINUTES FOR CONFIGURATION AND DEPLOYMENT. 
 
-### 📂 Files and Folders
+### ⚙️ GitHub Actions CI/CD Pipeline
+## CI/CD pipeline is included via github-actions.yaml. It performs:
+1. Checks out the code. 
+2. Determines the stage (dev or prod) based on branch or tag.
+3. Runs terraform init, plan, and apply.
+4. Waits until the deployed app on EC2 is available on port 80.
+5. Verifies HTTP 200 status using curl.
 
-| File/Folder              | Purpose                               |
-| ------------------------ | ------------------------------------- |
-| `main.tf`                | Infrastructure configuration          |
-| `dev_config.tfvars`      | Your environment-specific variables   |
-| `scripts/install_app.sh` | EC2 user data script for provisioning |
-| `outputs.tf` (optional)  | Outputs like instance public IP       |
+# ❗ Make sure to store your AWS credentials in GitHub Secrets as:
+```
+AWS_ACCESS_KEY_ID
 
-
+AWS_SECRET_ACCESS_KEY
+```
 ### 🛑 Tear Down Infrastructure
 ```
 terraform destroy -var-file="dev_config.tfvars" -auto-approve
