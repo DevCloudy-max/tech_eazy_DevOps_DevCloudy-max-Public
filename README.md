@@ -10,7 +10,7 @@ A full GitHub Actions pipeline is added (`.github/workflows/deploy.yaml`) that:
 
 ---
 
-#💡 AWS credentials must be stored as GitHub Secrets:
+# AWS credentials must be stored as GitHub Secrets:
 ```
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
