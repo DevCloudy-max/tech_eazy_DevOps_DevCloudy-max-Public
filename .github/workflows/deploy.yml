@@ -50,11 +50,11 @@ jobs:
             - name: Terraform Init
               run: terraform init
 
-            - name: Import ec2-write-only-profile (IAM instance profile)
-              run: terraform import -input=false -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars" aws_iam_instance_profile.ec2_instance_profile ec2-write-only-profile || true
+            # - name: Import ec2-write-only-profile (IAM instance profile)
+            #   run: terraform import -input=false -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars" aws_iam_instance_profile.ec2_instance_profile ec2-write-only-profile || true
 
-            - name: Import ec2-read-only-profile (IAM instance profile)
-              run: terraform import -input=false -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars" aws_iam_instance_profile.read_instance_profile ec2-read-only-profile || true
+            # - name: Import ec2-read-only-profile (IAM instance profile)
+            #   run: terraform import -input=false -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars" aws_iam_instance_profile.read_instance_profile ec2-read-only-profile || true
 
             - name: Terraform Formating
               run: terraform fmt -check
