@@ -71,7 +71,7 @@ jobs:
             
 
             
-              #run this for loop 15 times but after each loop stop for 10 sec then agian iterate
+             
             - name: Wait for EC2 to be ready on port 80 !!!
               run: |
 
