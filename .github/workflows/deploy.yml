@@ -87,6 +87,4 @@ jobs:
                   STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://$EC2_PUBLIC_IP)
                   echo "HTTP Status: $STATUS"
 
-
-              
-             
+#ed
