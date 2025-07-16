@@ -89,9 +89,9 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
   name  = "ec2-write-only-profile"
   role  = aws_iam_role.write_only_role.name
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 
 # ATTACHED INSTANCE PROFILES FOR READ ONLY
@@ -100,9 +100,9 @@ resource "aws_iam_instance_profile" "read_instance_profile" {
   name  = "ec2-read-only-profile"
   role  = aws_iam_role.read_only_role.name
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 
 # CREATION OF S3 BUCKET
