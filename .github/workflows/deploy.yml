@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      # - feature/pipline-enhancement
+      - feature/pipline-enhancement
     tags:
       - 'deploy-dev'
       - 'deploy-prod'
