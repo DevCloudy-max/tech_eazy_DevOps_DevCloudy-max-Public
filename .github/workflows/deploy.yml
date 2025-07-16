@@ -87,5 +87,5 @@ jobs:
                   STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://$EC2_PUBLIC_IP)
                   echo "HTTP Status: $STATUS"
             - name: Destroy
-              run: terraform destory 
+              run: terraform destroy -auto-approve -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars"
 
