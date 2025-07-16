@@ -51,4 +51,10 @@ variable "delete_S3_bucket" {
 
 }
 
+variable "enable_protection" {
+  description = "Enable lifecycle prevent_destroy protection"
+  type        = bool
+  default     = true
+}
+
 

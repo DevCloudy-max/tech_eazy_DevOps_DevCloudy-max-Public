@@ -11,8 +11,7 @@ provider "aws" {
   region = var.region
 }
 
-
-# STEP 1: Create a key pair and store private key locally
+# Generate SSH key pair
 resource "tls_private_key" "ec2_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -21,21 +20,21 @@ resource "tls_private_key" "ec2_key" {
 resource "aws_key_pair" "generated_key" {
   key_name   = "${var.stage}-key"
   public_key = tls_private_key.ec2_key.public_key_openssh
+
+  // Controlled by enable_protection variable
+  lifecycle {
+    prevent_destroy = var.enable_protection
+  }
 }
 
-
-
-# STEP 2: Save private key to a PEM file on local machine
+# Save private key to local PEM file
 resource "local_file" "private_key" {
   filename        = "${path.module}/${var.stage}-key.pem"
   content         = tls_private_key.ec2_key.private_key_pem
   file_permission = "0400"
 }
 
-
-
-
-#  s3 bucket name RANDOM STRING + LOCALS 
+#  Random suffix for S3 bucket name
 resource "random_string" "bucket_suffix" {
   length  = 6
   upper   = false
@@ -46,10 +45,7 @@ locals {
   final_bucket_name = "${var.s3_bucket_prefix}-${random_string.bucket_suffix.result}"
 }
 
-
-
-# IAM POLICIES AND ROLES 
-
+#  IAM trust policy for EC2
 data "aws_iam_policy_document" "assume_ec2" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -60,10 +56,7 @@ data "aws_iam_policy_document" "assume_ec2" {
   }
 }
 
-
-
-
-# Read-only role
+#  Read-only role and policy
 resource "aws_iam_role" "read_only_role" {
   name               = "read-only-role"
   assume_role_policy = data.aws_iam_policy_document.assume_ec2.json
@@ -78,9 +71,7 @@ resource "aws_iam_role_policy" "read_only_policy" {
   })
 }
 
-
-
-# Write-only role
+#  Write-only role and policy
 resource "aws_iam_role" "write_only_role" {
   name               = "write-only-role"
   assume_role_policy = data.aws_iam_policy_document.assume_ec2.json
@@ -95,41 +86,35 @@ resource "aws_iam_role_policy" "write_only_policy" {
   })
 }
 
-
-
-# ATTACHED INSTANCE PROFILES FOR WRITE ONLY 
-
+#  Instance profile for write-only role
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
   name = "ec2-write-only-profile"
   role = aws_iam_role.write_only_role.name
 
+  //  Controlled by enable_protection variable
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = var.enable_protection
   }
 }
 
-
-
-# ATTACHED INSTANCE PROFILES FOR READ ONLY
+# Instance profile for read-only role
 resource "aws_iam_instance_profile" "read_instance_profile" {
   name = "ec2-read-only-profile"
   role = aws_iam_role.read_only_role.name
 
+  //  Controlled by enable_protection variable
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = var.enable_protection
   }
 }
 
-
-
-# CREATION OF S3 BUCKET  
-
+# S3 bucket to store logs
 resource "aws_s3_bucket" "logs_bucket" {
   bucket        = local.final_bucket_name
   force_destroy = var.delete_S3_bucket
 }
 
-# LIFECYCLE FOR S3 BUCKET
+#  S3 lifecycle policy (auto-delete after 7 days)
 resource "aws_s3_bucket_lifecycle_configuration" "log_cleanup" {
   bucket = aws_s3_bucket.logs_bucket.id
 
@@ -147,13 +132,12 @@ resource "aws_s3_bucket_lifecycle_configuration" "log_cleanup" {
   }
 }
 
-
-# NETWORKING VPC
+#  Use default VPC
 data "aws_vpc" "default" {
   default = true
 }
 
-# CREATION OF SECURITY GROUP
+#  Security group with HTTP & SSH access
 resource "aws_security_group" "web_sg" {
   name        = "web-access-${var.stage}"
   description = "Allow HTTP access"
@@ -179,9 +163,7 @@ resource "aws_security_group" "web_sg" {
   }
 }
 
-
-# EC2 INSTANCES MAIN INSTANCE 
-
+#  Main EC2 instance to host Spring Boot app
 resource "aws_instance" "ec2_instance" {
   ami                  = var.AMI_img_Id
   instance_type        = var.instance_type
@@ -201,8 +183,7 @@ resource "aws_instance" "ec2_instance" {
   }))
 }
 
-
-# VERIFICATION INSTANCE 
+#  Secondary EC2 instance for verification
 resource "aws_instance" "reader_instance" {
   ami                  = var.AMI_img_Id
   instance_type        = var.instance_type
@@ -218,7 +199,7 @@ resource "aws_instance" "reader_instance" {
               #!/bin/bash
               yum update -y
               yum install -y awscli
-               sleep 120
+              sleep 120
               aws s3 ls s3://${local.final_bucket_name}/logs/ --region ${var.region} > /var/log/s3-read-check.log 2>&1
               EOF
 }
