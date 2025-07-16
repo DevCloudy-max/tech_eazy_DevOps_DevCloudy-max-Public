@@ -86,3 +86,6 @@ jobs:
                   echo "Curling http://$EC2_PUBLIC_IP"
                   STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://$EC2_PUBLIC_IP)
                   echo "HTTP Status: $STATUS"
+            - name: Destroy
+              run: terraform destory 
+
