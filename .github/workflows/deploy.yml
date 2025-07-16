@@ -1,6 +1,14 @@
 name: Deploy Java application via Terraform
 
 on:
+
+    workflow_dispatch:
+     inputs:
+      stage:
+        description: "Stage to deploy (e.g., dev, prod)"
+        required: false
+        default: "dev"
+
     push:
         branches:
             - main
@@ -27,6 +35,7 @@ jobs:
               with:
                 terraform_version: 1.6.6
 
+             
             - name: Determine stage
               id: get-stage
               run: |
