@@ -222,3 +222,5 @@ resource "aws_instance" "reader_instance" {
               aws s3 ls s3://${local.final_bucket_name}/logs/ --region ${var.region} > /var/log/s3-read-check.log 2>&1
               EOF
 }
+
+# 
