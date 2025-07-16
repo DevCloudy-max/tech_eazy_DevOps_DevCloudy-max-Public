@@ -61,6 +61,26 @@ jobs:
         run: terraform validate
  
      
+      - name: Dynamic Terraform Import for Existing Resources
+        run: |
+          STAGE="${{ steps.get-stage.outputs.stage }}"
+
+          echo "Importing existing AWS resources for stage: $STAGE"
+
+          # IAM Roles
+          terraform import aws_iam_role.read_only_role read-only-role || echo "read-only-role already imported or not found"
+          terraform import aws_iam_role.write_only_role write-only-role || echo " write-only-role already imported or not found"
+
+          # IAM Instance Profiles
+          terraform import aws_iam_instance_profile.ec2_instance_profile ec2-write-only-profile || echo " ec2-write-only-profile already imported or not found"
+          terraform import aws_iam_instance_profile.read_instance_profile ec2-read-only-profile || echo " ec2-read-only-profile already imported or not found"
+
+          # EC2 Key Pair
+          terraform import aws_key_pair.generated_key "$STAGE-key" || echo " $STAGE-key keypair already imported or not found"
+
+          # Security Group
+          terraform import aws_security_group.web_sg "web-access-$STAGE" || echo " web-access-$STAGE SG already imported or not found"
+  
       - name: Terraform Plan
         run: terraform plan -var="enable_protection=false" -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars"
 
