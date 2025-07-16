@@ -101,6 +101,7 @@ resource "aws_iam_role_policy" "write_only_policy" {
 # ATTACHED INSTANCE PROFILES FOR WRITE ONLY 
 
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
+   count = var.enable_protection ? 1 : 0
   name = "ec2-write-only-profile"
   role = aws_iam_role.write_only_role.name
 
