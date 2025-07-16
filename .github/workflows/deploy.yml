@@ -60,30 +60,12 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
  
-      - name: Import ec2-write-only-profile (IAM instance profile)
-        run: terraform import -input=false -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars" aws_iam_instance_profile.ec2_instance_profile ec2-write-only-profile || true
-
-      - name: Import ec2-read-only-profile (IAM instance profile)
-        run: terraform import -input=false -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars" aws_iam_instance_profile.read_instance_profile ec2-read-only-profile || true
-
-      - name: Import read-only IAM role
-        run: terraform import -input=false aws_iam_role.read_only_role read-only-role || true
-
-      - name: Import write-only IAM role
-        run: terraform import -input=false aws_iam_role.write_only_role write-only-role || true
-
-      - name: Import EC2 Key Pair
-        run: terraform import -input=false aws_key_pair.generated_key ${GITHUB_REF_NAME}-key || true
-
-      - name: Import Security Group
-        run: terraform import -input=false aws_security_group.web_sg web-access-${{ steps.get-stage.outputs.stage }} || true
-        
-        
+     
       - name: Terraform Plan
-        run: terraform plan -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars"
+        run: terraform plan -var="enable_protection=false" -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars"
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars"
+        run: terraform apply -auto-approve -var="enable_protection=false" -var-file="${{ steps.get-stage.outputs.stage }}_config.tfvars"
 
       - name: Wait for EC2 to be ready on port 80 !!!
         run: |
