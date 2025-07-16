@@ -58,3 +58,7 @@ variable "enable_protection" {
 }
 
 
+variable "write_key_file_locally" {
+  type    = bool
+  default = false
+}

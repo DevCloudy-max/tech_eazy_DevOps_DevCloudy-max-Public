@@ -27,6 +27,7 @@ resource "aws_key_pair" "generated_key" {
 
 # STEP 2: Save private key to a PEM file on local machine
 resource "local_file" "private_key" {
+  count           = var.write_key_file_locally ? 1 : 0
   filename        = "${path.module}/${var.stage}-key.pem"
   content         = tls_private_key.ec2_key.private_key_pem
   file_permission = "0400"
