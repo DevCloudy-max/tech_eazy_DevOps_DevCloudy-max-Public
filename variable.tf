@@ -32,9 +32,22 @@ variable "github_repo_url" {
   default     = "https://github.com/techeazy-consulting/techeazy-devops.git"
 }
 
-variable "stop_after"{
- description = "After the given time instance is stop automatically"
- type        = number
-    default     = 20
+variable "stop_after" {
+  description = "After the given time instance is stop automatically"
+  type        = number
+  default     = 20
 }
-  
+
+variable "s3_bucket_prefix" {
+  type        = string
+  description = "Name of the S3 bucket for storing logs"
+
+}
+
+variable "delete_S3_bucket" {
+  description = "To delete force fully"
+  type        = bool
+
+}
+
+
