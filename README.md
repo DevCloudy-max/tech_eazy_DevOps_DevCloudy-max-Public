@@ -105,4 +105,22 @@ AWS_SECRET_ACCESS_KEY
 ```
 terraform destroy -var-file="dev_config.tfvars" -auto-approve
 ```
+
+## 🚀 Deployment via Git Tags
+
+### To trigger deployment using GitHub Actions based on environment:
+
+- For development (dev) environment:
+
+```
+git tag deploy-dev
+git push origin deploy-dev
+```
+- For Production (prod) environment:
+
+```
+git tag deploy-prod
+git push origin deploy-prod
+```
+
 ### NOTE : 💡 Make sure your S3 bucket is empty or use force_destroy = true.
