@@ -1,21 +1,20 @@
 name: Deploy Java application via Terraform
 
 on:
-
-    workflow_dispatch:
-     inputs:
+  workflow_dispatch:
+    inputs:      
       stage:
         description: "Stage to deploy (e.g., dev, prod)"
         required: false
         default: "dev"
 
-    push:
-        branches:
-            - main
-            - feature/pipline-enhancement
-        tags:
-            - 'deploy-dev'
-            - 'deploy-prod'
+  push:
+    branches:
+      - main
+      - feature/pipline-enhancement
+    tags:
+      - 'deploy-dev'
+      - 'deploy-prod'
     
 jobs:
     Terraform-deployment:
