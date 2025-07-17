@@ -35,7 +35,7 @@ variable "github_repo_url" {
 variable "stop_after" {
   description = "After the given time instance is stop automatically"
   type        = number
-  default     = 20
+  default     = 30
 }
 
 variable "s3_bucket_prefix" {
@@ -47,7 +47,18 @@ variable "s3_bucket_prefix" {
 variable "delete_S3_bucket" {
   description = "To delete force fully"
   type        = bool
+  default     = true
 
 }
 
+variable "enable_protection" {
+  description = "Enable lifecycle prevent_destroy protection"
+  type        = bool
+  default     = true
+}
 
+
+variable "write_key_file_locally" {
+  type    = bool
+  default = false
+}
