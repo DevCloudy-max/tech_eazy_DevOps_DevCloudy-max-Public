@@ -222,3 +222,40 @@ resource "aws_instance" "reader_instance" {
               aws s3 ls s3://${local.final_bucket_name}/logs/ --region ${var.region} > /var/log/s3-read-check.log 2>&1
               EOF
 }
+
+# Add SNS Topic and Subscription
+resource "aws_sns_topic" "app_alerts" {
+  name = "app-alerts-topic"
+}
+
+resource "aws_sns_topic_subscription" "email_notification" {
+  topic_arn = aws_sns_topic.app_alerts.arn
+  protocol  = "email"
+  endpoint  = "jayprajapati491@gmail.com" # Replace with your real email
+}
+
+resource "aws_cloudwatch_log_metric_filter" "app_error_filter" {
+  name           = "app-error-filter"
+  log_group_name = "techezy-app-logs"
+  pattern        = "?ERROR ?Exception"
+
+  metric_transformation {
+    name      = "AppErrorCount"
+    namespace = "TechezyAppMonitoring"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "app_error_alarm" {
+  alarm_name          = "techezy-error-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  metric_name         = "AppErrorCount"
+  namespace           = "TechezyAppMonitoring"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 1
+
+  alarm_description   = "Trigger alarm if app log has ERROR or Exception"
+  alarm_actions       = [aws_sns_topic.app_alerts.arn]
+}

@@ -22,6 +22,23 @@ sudo yum update -y
 echo "Installing Java 21 and Git..."
 sudo yum install -y java-21-amazon-corretto-devel git
 
+# Install CloudWatch Agent
+echo "Installing CloudWatch Agent..."
+sudo yum install -y amazon-cloudwatch-agent
+
+# Fetch config from GitHub
+echo "Downloading CloudWatch Agent config..."
+curl -o /opt/cloudwatch-config.json https://github.com/DevCloudy-max/tech_eazy_DevOps_DevCloudy-max-Public/blob/monitoring/cloudwatch-config.json
+
+# Start CloudWatch Agent
+echo "Starting CloudWatch Agent..."
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+  -a fetch-config \
+  -m ec2 \
+  -c file:/opt/cloudwatch-config.json \
+  -s
+
+
 # 4. Clone GitHub Repository
 APP_DIR="/home/ec2-user/app"
 echo "Cloning GitHub repository from $REPO_URL..."

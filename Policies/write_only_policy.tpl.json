@@ -3,8 +3,22 @@
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": ["s3:PutObject"],
+      "Action": [
+        "s3:PutObject"
+      ],
       "Resource": "arn:aws:s3:::${bucket_name}/*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": "*"
     }
   ]
 }
+
