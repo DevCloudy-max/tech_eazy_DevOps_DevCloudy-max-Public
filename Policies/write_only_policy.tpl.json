@@ -18,7 +18,24 @@
         "logs:DescribeLogStreams"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sns:ListSubscriptionsByTopic",
+        "sns:Publish",
+        "sns:Subscribe"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:PutMetricFilter",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": "arn:aws:logs:ap-south-1:724772082111:log-group:techezy-app-logs:*"
     }
   ]
 }
-

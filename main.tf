@@ -234,9 +234,21 @@ resource "aws_sns_topic_subscription" "email_notification" {
   endpoint  = "jayprajapati491@gmail.com" # Replace with your real email
 }
 
+# Create CloudWatch Log Group
+resource "aws_cloudwatch_log_group" "app_logs" {
+  name              = "techezy-app-logs"
+  retention_in_days = 7
+}
+
+resource "aws_cloudwatch_log_stream" "techezy_log_stream" {
+  name           = "test-stream"
+  log_group_name = aws_cloudwatch_log_group.app_logs.name
+}
+
+# Metric Filter for ERROR/Exception logs
 resource "aws_cloudwatch_log_metric_filter" "app_error_filter" {
   name           = "app-error-filter"
-  log_group_name = "techezy-app-logs"
+  log_group_name = aws_cloudwatch_log_group.app_logs.name
   pattern        = "?ERROR ?Exception"
 
   metric_transformation {
@@ -246,6 +258,7 @@ resource "aws_cloudwatch_log_metric_filter" "app_error_filter" {
   }
 }
 
+# Alarm on AppErrorCount Metric
 resource "aws_cloudwatch_metric_alarm" "app_error_alarm" {
   alarm_name          = "techezy-error-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -256,6 +269,6 @@ resource "aws_cloudwatch_metric_alarm" "app_error_alarm" {
   statistic           = "Sum"
   threshold           = 1
 
-  alarm_description   = "Trigger alarm if app log has ERROR or Exception"
-  alarm_actions       = [aws_sns_topic.app_alerts.arn]
+  alarm_description = "Trigger alarm if app log has ERROR or Exception"
+  alarm_actions     = [aws_sns_topic.app_alerts.arn]
 }

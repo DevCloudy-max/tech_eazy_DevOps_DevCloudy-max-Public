@@ -12,6 +12,7 @@ on:
     branches:
       - main
       - feature/pipline-enhancement
+      - monitoring
     tags:
       - 'deploy-dev'
       - 'deploy-prod'
