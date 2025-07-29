@@ -44,6 +44,9 @@ jobs:
 
                elif [[ "${GITHUB_REF}" == "refs/heads/feature/pipline-enhancement" ]]; then
                   echo "stage=dev" >> "$GITHUB_OUTPUT"
+               
+               elif [[ "${GITHUB_REF}" == "refs/heads/monitoring" ]]; then
+                  echo "stage=dev" >> "$GITHUB_OUTPUT"
 
                elif [[ "${GITHUB_REF}" == "refs/tags/deploy-prod" ]]; then
                   echo "stage=prod" >> "$GITHUB_OUTPUT"
