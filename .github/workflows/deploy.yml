@@ -1,4 +1,4 @@
-name: Deploy Java application via Terraform
+name: Deploy Java application via Terraform()
 
 on:
   workflow_dispatch:
